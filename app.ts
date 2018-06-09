@@ -37,11 +37,11 @@ class WebHook {
     const proc = childProcess.exec('npm start');
     
     proc.stdout.on('data', (data) => {
-      process.stdout.write(`stdout:\n${data}`);
+      process.stdout.write(`stdout: ${data}`);
     });
     
     proc.stderr.on('data', (data) => {
-      process.stdout.write(`stderr:\n${data}`);
+      process.stdout.write(`stderr: ${data}`);
     });
     
     setTimeout(async () => {
@@ -51,6 +51,8 @@ class WebHook {
       if (newestProc) {
         this.lastPid = Number(newestProc.split(' ')[0]);
       }
+
+      console.log('PID: ' + this.lastPid);
   
       this.deployInProgress = false;
       console.log('Done');
