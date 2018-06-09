@@ -42,6 +42,10 @@ class WebHook {
     proc.stdout.on('data', (data) => {
       process.stdout.write(data);
     });
+
+    proc.stderr.on('data', (data) => {
+      process.stdout.write(data);
+    });
     
     setTimeout(async () => {
       const { stdout } = await exec('ps | grep node');
@@ -51,7 +55,7 @@ class WebHook {
         this.lastPid = Number(newestProc.split(' ')[0]);
       }
 
-      console.log('[info] Deployed. Node PID: ' + this.lastPid);
+      console.log('[info] Build finished. Node PID: ' + this.lastPid);
   
       this.deployInProgress = false;
     }, 1000);
@@ -61,12 +65,11 @@ class WebHook {
     const app = express();
 
     app.post('/git/hook', (req, res) => {
-      console.log('Deploying');
       this.deploy();
     });
 
-    await app.listen(PORT, () => {
-      console.log(`Server listening: http://localhost:${PORT}`);
+    app.listen(PORT, () => {
+      console.log(`[hook] Server listening on port ${PORT}`);
     });
   }
 }
