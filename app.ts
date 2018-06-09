@@ -34,6 +34,9 @@ class WebHook {
     await exec('npm install');
 
     console.log('Starting node app');
+    if (this.lastPid) {
+      process.kill(this.lastPid);
+    }
     const proc = childProcess.exec('npm start');
     
     proc.stdout.on('data', (data) => {
