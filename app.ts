@@ -40,11 +40,7 @@ class WebHook {
     const proc = childProcess.exec('npm start');
     
     proc.stdout.on('data', (data) => {
-      process.stdout.write(`stdout: ${data}`);
-    });
-    
-    proc.stderr.on('data', (data) => {
-      process.stdout.write(`stderr: ${data}`);
+      process.stdout.write(`[#] ${data}`);
     });
     
     setTimeout(async () => {
