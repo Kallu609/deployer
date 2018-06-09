@@ -29,12 +29,21 @@ class WebHook {
     console.log('Starting with `npm start`');
     const proc = childProcess.exec('npm start');
     this.previousPid = proc.pid;
+    console.log('PID: ' + this.previousPid);
+    console.log('PIDof: ' + (await exec('pidof node')));
 
     proc.stdout.on('data', (data) => {
-      process.stdout.write(data);
+      process.stdout.write('STDOUT: ' + data);
     });
 
-    console.log('PID: ' + this.previousPid);
+    proc.stderr.on('data', (data) => {
+      process.stdout.write('STDERR: ' + data);
+    });
+
+    proc.on('close', (code) => {
+      process.stdout.write('Closing code: ' + code);
+    });
+    
   }
 
   async createHTTPServer(): Promise<void> {
