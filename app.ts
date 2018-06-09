@@ -50,8 +50,8 @@ class WebHook {
     this.log('[info] Build started');
 
     this.log('[info] Pulling from origin');
-    await exec(`git stash`);
-    await exec(`git pull origin master`);
+    await exec(`git fetch --all`);
+    await exec(`git reset --hard origin/master`);
 
     this.log('[info] Reinstalling node modules');
     await exec('npm install');
