@@ -7,9 +7,11 @@
     "start": "ts-node app.ts"
   },
   "dependencies": {
+    "dotenv": "^6.0.0",
     "express": "^4.16.3"
   },
   "devDependencies": {
+    "@types/dotenv": "^4.0.3",
     "@types/express": "^4.16.0",
     "ts-node": "^6.1.0",
     "typescript": "^2.9.1"

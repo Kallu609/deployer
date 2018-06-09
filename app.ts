@@ -1,20 +1,32 @@
 import * as childProcess from 'child_process';
 import * as express from 'express';
-import * as util from 'util';
 
+import * as util from 'util';
 const exec = util.promisify(childProcess.exec);
-const DEPLOY_FOLDER = '/home/kalle/Projects/tuplabottijr';
-const PORT = 2840;
+
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 class WebHook {
+  port: number;
   lastPid: number;
   deployInProgress: boolean;
 
   constructor() {
+    this.port = Number(process.env.PORT);
     this.createHTTPServer();
     this.deploy();
   }
 
+  log(text: string): void {
+    const time = new Date;
+    const timeStr = ('0' + time.getHours()).slice(-2) + ':' +
+                    ('0' + time.getMinutes()).slice(-2) + ':' +
+                    ('0' + time.getSeconds()).slice(-2);
+    
+    console.log(`[${timeStr}] ${text}`);
+  }
+  
   async deploy(): Promise<void> {
     if (this.deployInProgress) {
       setTimeout(() => {
@@ -25,15 +37,15 @@ class WebHook {
     }
 
     this.deployInProgress = true;
-    console.log('[info] Build started');
+    this.log('[info] Build started');
 
-    console.log('[info] Pulling from origin');
+    this.log('[info] Pulling from origin');
     await exec(`git pull origin master`);
 
-    console.log('[info] Reinstalling node modules');
+    this.log('[info] Reinstalling node modules');
     await exec('npm install');
 
-    console.log('[info] Starting node app');
+    this.log('[info] Starting node app');
     if (this.lastPid) {
       process.kill(this.lastPid);
       this.lastPid = -1;
@@ -58,7 +70,7 @@ class WebHook {
         this.lastPid = Number(newestProc.split(' ')[0]);
       }
 
-      console.log('[info] Build finished. Node PID: ' + this.lastPid);
+      this.log('[info] Build finished. Node PID: ' + this.lastPid);
   
       this.deployInProgress = false;
     }, 1000);
@@ -71,14 +83,14 @@ class WebHook {
       this.deploy();
     });
 
-    app.listen(PORT, () => {
-      console.log(`[hook] Server listening on port ${PORT}`);
+    app.listen(this.port, () => {
+      console.log(`[hook] Server listening on port ${this.port}`);
     });
   }
 }
 
 try {
-  process.chdir(DEPLOY_FOLDER);
+  process.chdir(process.env.DEPLOY_FOLDER as string);
 } catch (e) {
   console.log('Deploy folder doesn\'t exist.');
   process.exit();
