@@ -14,8 +14,18 @@ class WebHook {
 
   constructor() {
     this.port = Number(process.env.PORT);
+    this.changeWorkingDirectory();
     this.createHTTPServer();
     this.deploy();
+  }
+  
+  changeWorkingDirectory(): void {
+    try {
+      process.chdir(process.env.DEPLOY_FOLDER as string);
+    } catch (e) {
+      console.log('Deploy folder doesn\'t exist.');
+      process.exit();
+    }
   }
 
   log(text: string): void {
@@ -84,16 +94,9 @@ class WebHook {
     });
 
     app.listen(this.port, () => {
-      console.log(`[hook] Server listening on port ${this.port}`);
+      this.log(`[hook] Server listening on port ${this.port}`);
     });
   }
-}
-
-try {
-  process.chdir(process.env.DEPLOY_FOLDER as string);
-} catch (e) {
-  console.log('Deploy folder doesn\'t exist.');
-  process.exit();
 }
 
 const hook = new WebHook();
