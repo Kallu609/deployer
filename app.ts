@@ -43,16 +43,18 @@ class WebHook {
       process.stdout.write(data);
     });
     
-    const { stdout } = await exec('ps | grep node');
-    const newestProc = stdout.trim().split('\n').pop();
-    
-    if (newestProc) {
-      this.lastPid = Number(newestProc.split(' ')[0]);
-    }
+    setTimeout(async () => {
+      const { stdout } = await exec('ps | grep node');
+      const newestProc = stdout.trim().split('\n').pop();
+      
+      if (newestProc) {
+        this.lastPid = Number(newestProc.split(' ')[0]);
+      }
 
-    console.log('[info] Deployed. Node PID: ' + this.lastPid);
-
-    this.deployInProgress = false;
+      console.log('[info] Deployed. Node PID: ' + this.lastPid);
+  
+      this.deployInProgress = false;
+    }, 1000);
   }
 
   async createHTTPServer(): Promise<void> {
