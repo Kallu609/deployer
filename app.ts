@@ -3,7 +3,7 @@ import * as express from 'express';
 import * as util from 'util';
 
 const exec = util.promisify(childProcess.exec);
-const DEPLOY_FOLDER = 'X:\\Desktop\\Tuplabotti-Jr';
+const DEPLOY_FOLDER = '/home/kalle/Projects/tuplabottijr';
 const PORT = 2840;
 
 class WebHook {
@@ -33,7 +33,16 @@ class WebHook {
     console.log('Reinstalling node modules');
     await exec('npm install');
 
-    childProcess.exec('npm start');
+    console.log('Starting node app');
+    const proc = childProcess.exec('npm start');
+    
+    proc.stdout.on('data', (data) => {
+      process.stdout.write(`stdout:\n${data}`);
+    });
+    
+    proc.stderr.on('data', (data) => {
+      process.stdout.write(`stderr:\n${data}`);
+    });
     
     setTimeout(async () => {
       const { stdout } = await exec('ps | grep node');
