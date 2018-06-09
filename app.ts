@@ -49,7 +49,7 @@ class WebHook {
       const newestProc = stdout.split('\n').pop();
       
       console.log('STDOUT: ' + stdout);
-      console.log(stdout.split('\n'));
+      console.log(stdout.trim().split('\n'));
       if (newestProc) {
         this.lastPid = Number(newestProc.split(' ')[0]);
       }
