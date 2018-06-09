@@ -36,6 +36,7 @@ class WebHook {
     console.log('[info] Starting node app');
     if (this.lastPid) {
       process.kill(this.lastPid);
+      this.lastPid = -1;
     }
     const proc = childProcess.exec('npm start');
     
@@ -44,7 +45,9 @@ class WebHook {
     });
 
     proc.stderr.on('data', (data) => {
-      process.stdout.write(data);
+      if (this.lastPid !== -1) {
+        process.stdout.write(data);
+      }
     });
     
     setTimeout(async () => {
