@@ -11,6 +11,7 @@ class WebHook {
 
   constructor() {
     this.createHTTPServer();
+    hook.deploy();
   }
 
   async deploy(): Promise<void> {
@@ -30,7 +31,8 @@ class WebHook {
     const proc = childProcess.exec('npm start');
     this.previousPid = proc.pid;
     console.log('PID: ' + this.previousPid);
-    console.log('PIDof: ' + (await exec('pidof node')));
+    const { stdout } = await exec('pidof node');
+    console.log('PIDof: ' + (stdout));
 
     proc.stdout.on('data', (data) => {
       process.stdout.write('STDOUT: ' + data);
@@ -67,4 +69,4 @@ try {
   process.exit();
 }
 
-new WebHook();
+const hook = new WebHook();
