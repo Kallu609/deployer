@@ -25,22 +25,22 @@ class WebHook {
     }
 
     this.deployInProgress = true;
+    console.log('[info] Build started');
 
-    console.log('Pulling from origin');
+    console.log('[info] Pulling from origin');
     await exec(`git pull origin master`);
-    console.log('Done pulling');
 
-    console.log('Reinstalling node modules');
+    console.log('[info] Reinstalling node modules');
     await exec('npm install');
 
-    console.log('Starting node app');
+    console.log('[info] Starting node app');
     if (this.lastPid) {
       process.kill(this.lastPid);
     }
     const proc = childProcess.exec('npm start');
     
     proc.stdout.on('data', (data) => {
-      process.stdout.write(`[#] ${data}`);
+      process.stdout.write(data);
     });
     
     setTimeout(async () => {
@@ -51,11 +51,10 @@ class WebHook {
         this.lastPid = Number(newestProc.split(' ')[0]);
       }
 
-      console.log('PID: ' + this.lastPid);
+      console.log('[info] Deployed. Node PID: ' + this.lastPid);
   
       this.deployInProgress = false;
-      console.log('Done');
-    }, 1000);
+    }, 500);
   }
 
   async createHTTPServer(): Promise<void> {
