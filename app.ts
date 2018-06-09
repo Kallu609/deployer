@@ -3,7 +3,7 @@ import * as express from 'express';
 import * as util from 'util';
 
 const exec = util.promisify(childProcess.exec);
-const DEPLOY_FOLDER = '';
+const DEPLOY_FOLDER = 'X:\\Desktop\\Tuplabotti-Jr';
 const PORT = 2840;
 
 class WebHook {
@@ -14,6 +14,11 @@ class WebHook {
   }
 
   async deploy(): Promise<void> {
+    if (this.previousPid) {
+      console.log('Killing previous process');
+      process.kill(this.previousPid);
+    }
+
     console.log('Pulling from origin');
     await exec(`git pull origin master`);
     console.log('Done pulling');
@@ -21,16 +26,15 @@ class WebHook {
     console.log('Reinstalling node modules');
     await exec('npm install');
 
-    if (this.previousPid) {
-      console.log('Killing previous process');
-      process.kill(this.previousPid);
-    }
-
     console.log('Starting with `npm start`');
     const proc = childProcess.exec('npm start');
     this.previousPid = proc.pid;
-    console.log(this.previousPid);
-    console.log('Started');
+
+    proc.stdout.on('data', (data) => {
+      process.stdout.write(data);
+    });
+
+    console.log('PID: ' + this.previousPid);
   }
 
   async createHTTPServer(): Promise<void> {
