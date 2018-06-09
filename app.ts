@@ -46,10 +46,8 @@ class WebHook {
     
     setTimeout(async () => {
       const { stdout } = await exec('ps | grep node');
-      const newestProc = stdout.split('\n').pop();
+      const newestProc = stdout.trim().split('\n').pop();
       
-      console.log('STDOUT: ' + stdout);
-      console.log(stdout.trim().split('\n'));
       if (newestProc) {
         this.lastPid = Number(newestProc.split(' ')[0]);
       }
