@@ -7,18 +7,24 @@ const DEPLOY_FOLDER = 'X:\\Desktop\\Tuplabotti-Jr';
 const PORT = 2840;
 
 class WebHook {
-  previousPid: number;
+  lastPid: number;
+  deployInProgress: boolean;
 
   constructor() {
     this.createHTTPServer();
-    hook.deploy();
+    this.deploy();
   }
 
   async deploy(): Promise<void> {
-    if (this.previousPid) {
-      console.log('Killing previous process');
-      process.kill(this.previousPid);
+    if (this.deployInProgress) {
+      setTimeout(() => {
+        this.deploy();
+      }, 1000);
+
+      return;
     }
+
+    this.deployInProgress = true;
 
     console.log('Pulling from origin');
     await exec(`git pull origin master`);
@@ -27,25 +33,19 @@ class WebHook {
     console.log('Reinstalling node modules');
     await exec('npm install');
 
-    console.log('Starting with `npm start`');
-    const proc = childProcess.exec('npm start');
-    this.previousPid = proc.pid;
-    console.log('PID: ' + this.previousPid);
-    const { stdout } = await exec('pidof node');
-    console.log('PIDof: ' + (stdout));
-
-    proc.stdout.on('data', (data) => {
-      process.stdout.write('STDOUT: ' + data);
-    });
-
-    proc.stderr.on('data', (data) => {
-      process.stdout.write('STDERR: ' + data);
-    });
-
-    proc.on('close', (code) => {
-      process.stdout.write('Closing code: ' + code);
-    });
+    childProcess.exec('npm start');
     
+    setTimeout(async () => {
+      const { stdout } = await exec('ps | grep node');
+      const newestProc = stdout.split('\n').pop();
+  
+      if (newestProc) {
+        this.lastPid = Number(newestProc.split(' ')[0]);
+      }
+  
+      this.deployInProgress = false;
+      console.log('Done');
+    }, 1000);
   }
 
   async createHTTPServer(): Promise<void> {
