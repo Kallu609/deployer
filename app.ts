@@ -13,10 +13,10 @@ class WebHook {
   deployInProgress: boolean;
 
   constructor() {
-    this.port = Number(process.env.PORT);
+    this.port = 2840;
     this.changeWorkingDirectory();
     this.createHTTPServer();
-    this.deploy();
+    this.build();
   }
   
   changeWorkingDirectory(): void {
@@ -37,10 +37,10 @@ class WebHook {
     console.log(`[${timeStr}] ${text}`);
   }
   
-  async deploy(): Promise<void> {
+  async build(): Promise<void> {
     if (this.deployInProgress) {
       setTimeout(() => {
-        this.deploy();
+        this.build();
       }, 1000);
 
       return;
@@ -55,11 +55,16 @@ class WebHook {
     this.log('[info] Reinstalling node modules');
     await exec('npm install');
 
+    this.startProcess();
+  }
+
+  startProcess(): void {
     this.log('[info] Starting node app');
     if (this.lastPid) {
       process.kill(this.lastPid);
       this.lastPid = -1;
     }
+
     const proc = childProcess.exec('npm start');
     
     proc.stdout.on('data', (data) => {
@@ -90,9 +95,9 @@ class WebHook {
     const app = express();
 
     app.post('/git/hook', (req, res) => {
-      this.deploy();
+      this.build();
     });
-
+    
     app.listen(this.port, () => {
       this.log(`[hook] Server listening on port ${this.port}`);
     });
