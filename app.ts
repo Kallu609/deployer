@@ -1,11 +1,10 @@
 import * as childProcess from 'child_process';
 import * as express from 'express';
-
 import * as util from 'util';
-const exec = util.promisify(childProcess.exec);
-
 import * as dotenv from 'dotenv';
 dotenv.config();
+
+const exec = util.promisify(childProcess.exec);
 
 class WebHook {
   port: number;
