@@ -1,6 +1,6 @@
 import * as childProcess from 'child_process';
 import * as dotenv from 'dotenv';
-import * as http from 'http';
+import * as express from 'express';
 import * as util from 'util';
 import * as path from 'path';
 
@@ -42,18 +42,20 @@ function changeCwd(): void {
 }
 
 async function createServer(): Promise<void> {
-  const server = http.createServer(async (req, res) => {
-    res.end('Hi');
+  const server = express();
 
-    if (req.url === '/git/hook') {
-      await closeApp();
-      await fetchFromGit();
-      await build();
-      await startApp();
-    }
+  server.get('/git/hook', async (req, res) => {
+    await closeApp();
+    await fetchFromGit();
+    await build();
+    await startApp();
+    res.write('Hehehe');
   });
 
-  server.listen(webhookPort, () => {
+  server.listen(webhookPort, (err: Error) => {
+    if (err) {
+      throw err;
+    }
     log('Webhook is listening on port ' + webhookPort);
   });
 }
