@@ -7,11 +7,11 @@ import * as dateFormat from 'dateformat';
 
 /* Environment variables */
 dotenv.config();
-const deployFolder = process.env.DEPLOY_FOLDER || '';
+const deployFolder = process.env.DEPLOY_FOLDER;
 const webhookPort = Number(process.env.WEBHOOK_PORT) || 8080;
 const remoteBranch = process.env.REMOTE_BRANCH || 'origin';
 const localBranch = process.env.LOCAL_BRANCH || 'master';
-const npmClient = process.env.NPM_CLIENT || 'npm';
+const npmClient = process.env.NPM_CLIENT || 'yarn';
 /* /Environment variables */
 
 const exec = util.promisify(childProcess.exec);

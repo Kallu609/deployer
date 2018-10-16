@@ -21,7 +21,7 @@ It creates new pm2 process with the same name as the projects directory, so make
 
 
 2. Setup Git Webhook on your GitHub projects `/settings/hooks` path.
-    * Hook path is: http://localhost/git/hook
+    * Hook path is: http://localhost:8080/git/hook (default port is 8080)
 
 3. Run following commands:
 
