@@ -9,7 +9,7 @@ dotenv.config();
 const deployFolder = process.env.DEPLOY_FOLDER || '';
 const webhookPort = Number(process.env.WEBHOOK_PORT) || 8080;
 const remoteBranch = process.env.REMOTE_BRANCH || 'origin';
-const localBranch = process.env.REMOTE_BRANCH || 'master';
+const localBranch = process.env.LOCAL_BRANCH || 'master';
 const npmClient = process.env.NPM_CLIENT || 'npm';
 /* /Environment variables */
 
@@ -33,9 +33,8 @@ function changeCwd(): void {
     }
 
     process.chdir(deployFolder);
-    appName = path.dirname(deployFolder);
-  } catch (e) {
-    console.log(e);
+    appName = path.basename(deployFolder);
+  } catch {
     log('Deploy folder doesn\'t exist.');
     process.exit();
   }
@@ -74,12 +73,14 @@ async function build(): Promise<void> {
 async function startApp(): Promise<void> {
   log('Starting application');
   await exec(`pm2 start ${npmClient} -- start --name "${appName}"`);
-  log(`App started. Type 'ps2 logs "${appName}"' to view logs`)
+  log(`App started. Type 'pm2 logs "${appName}"' to view logs`)
 }
 
 async function closeApp(): Promise<void> {
-  log('Closing application (if opened)');
-  await exec(`pm2 delete "${appName}"`);
+  try {
+    await exec(`pm2 delete "${appName}"`);
+    console.log('Closed old application');
+  } catch { }
 }
 
 (() => {
