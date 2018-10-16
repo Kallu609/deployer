@@ -29,10 +29,10 @@ Just run `yarn start`.
 
 I recommend using screen on unix systems. If you don't want to use screen, just run `yarn start`.
 
-| Action               	| command  	          |
-|---------------------	|--------------------	|
-| Run on background:  	| yarn screen:start  	|
-| Resume (View logs): 	| yarn screen:resume 	|
-| Exit:               	| yarn screen:exit   	|
+| Action               	      | command  	          |
+|---------------------------- |--------------------	|
+| Run on background           | yarn screen:start  	|
+| Resume (Ctrl+A D to detach) | yarn screen:resume 	|
+| Quit                        | yarn screen:quit   	|
 
 That's it!
