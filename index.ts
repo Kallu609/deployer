@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 import * as express from 'express';
 import * as util from 'util';
 import * as path from 'path';
+import * as dateFormat from 'dateformat';
 
 /* Environment variables */
 dotenv.config();
@@ -17,13 +18,8 @@ const exec = util.promisify(childProcess.exec);
 let appName: string;
 
 function log(text: string): void {
-  const time = new Date;
-  const timeStr =
-    ('0' + time.getHours()).slice(-2) + ':' +
-    ('0' + time.getMinutes()).slice(-2) + ':' +
-    ('0' + time.getSeconds()).slice(-2);
-
-  console.log(`[${timeStr}] ${text}`);
+  const timestamp = dateFormat(new Date(), 'hh:mm:ss');
+  console.log(`[${timestamp}] ${text}`);
 }
 
 function changeCwd(): void {

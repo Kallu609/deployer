@@ -10,11 +10,13 @@
     "start": "ts-node index.ts"
   },
   "dependencies": {
+    "dateformat": "^3.0.3",
     "dotenv": "^6.0.0",
     "express": "^4.16.4",
     "pm2": "^3.2.2"
   },
   "devDependencies": {
+    "@types/dateformat": "^1.0.1",
     "@types/dotenv": "^4.0.3",
     "@types/express": "^4.16.0",
     "ts-node": "^6.1.0",
