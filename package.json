@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "screen:start": "screen -S deployer -d -m yarn start",
-    "screen:exit": "screen -X -S deployer",
+    "screen:quit": "screen -X -S deployer quit",
     "screen:resume": "screen -r deployer",
     "start": "ts-node index.ts"
   },
