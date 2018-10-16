@@ -45,18 +45,20 @@ async function createServer(): Promise<void> {
 
   server.all('/git/hook', async (req, res) => {
     res.send('Ok');
-    await closeApp();
-    await fetchFromGit();
-    await build();
-    await startApp();
+    deploy();
   });
 
-  server.listen(webhookPort, (err: Error) => {
-    if (err) {
-      throw err;
-    }
+  server.listen(webhookPort, () => {
     log('Webhook is listening on port ' + webhookPort);
+    deploy();
   });
+}
+
+async function deploy(): Promise<void> {
+  await closeApp();
+  await fetchFromGit();
+  await build();
+  await startApp();
 }
 
 async function fetchFromGit(): Promise<void> {
@@ -72,7 +74,7 @@ async function build(): Promise<void> {
 
 async function startApp(): Promise<void> {
   log('Starting application');
-  await exec(`pm2 start ${npmClient} --name "${appName} -- start"`);
+  await exec(`pm2 start ${npmClient} --name "${appName}" -- start`);
   log(`App started. Type 'pm2 logs "${appName}"' to view logs`)
 }
 
