@@ -49,7 +49,7 @@ async function createServer(): Promise<void> {
     await fetchFromGit();
     await build();
     await startApp();
-    res.write('Hehehe');
+    res.send('Hehehe');
   });
 
   server.listen(webhookPort, (err: Error) => {
