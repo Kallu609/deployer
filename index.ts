@@ -43,12 +43,12 @@ function changeCwd(): void {
 async function createServer(): Promise<void> {
   const server = express();
 
-  server.get('/git/hook', async (req, res) => {
+  server.all('/git/hook', async (req, res) => {
+    res.send('Ok');
     await closeApp();
     await fetchFromGit();
     await build();
     await startApp();
-    res.send('Hehehe');
   });
 
   server.listen(webhookPort, (err: Error) => {
@@ -72,7 +72,7 @@ async function build(): Promise<void> {
 
 async function startApp(): Promise<void> {
   log('Starting application');
-  await exec(`pm2 start ${npmClient} -- start --name "${appName}"`);
+  await exec(`pm2 start ${npmClient} --name "${appName} -- start"`);
   log(`App started. Type 'pm2 logs "${appName}"' to view logs`)
 }
 

@@ -19,7 +19,24 @@ Do `npm i -g yarn` if you don't have yarn already (You should).
 ```
 yarn global add pm2
 yarn install
-yarn start
+```
+
+### Running on windows
+
+Just run `yarn start`.
+
+### Running on linux
+
+If you're running linux, you probably want to run this on background.
+
+```
+yarn screen:start
+```
+
+If you want to quit the deployer, type
+
+```
+yarn screen:quit
 ```
 
 That's it!
