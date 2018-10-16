@@ -74,7 +74,6 @@ async function build(): Promise<void> {
 
 async function startApp(): Promise<void> {
   log('Starting application');
-  console.log(`pm2 start ${npmClient} --name "${appName}" -- start`);
   await exec(`pm2 start ${npmClient} --name "${appName}" -- start`);
   log(`App started. Type 'pm2 logs "${appName}"' to view logs`)
 }
@@ -82,7 +81,7 @@ async function startApp(): Promise<void> {
 async function closeApp(): Promise<void> {
   try {
     await exec(`pm2 delete "${appName}"`);
-    console.log('Closed old application');
+    log('Closed old application');
   } catch { }
 }
 
