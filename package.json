@@ -1,10 +1,10 @@
 {
   "name": "deployer",
   "version": "1.0.0",
-  "main": "app.ts",
+  "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node app.ts"
+    "start": "ts-node index.ts"
   },
   "dependencies": {
     "dotenv": "^6.0.0",
