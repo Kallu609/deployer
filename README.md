@@ -27,16 +27,12 @@ Just run `yarn start`.
 
 ### Running on linux
 
-If you're running linux, you probably want to run this on background.
+I recommend using screen on unix systems. If you don't want to use screen, just run `yarn start`.
 
-```
-yarn screen:start
-```
-
-If you want to quit the deployer, type
-
-```
-yarn screen:quit
-```
+| Action               	| command  	          |
+|---------------------	|--------------------	|
+| Run on background:  	| yarn screen:start  	|
+| Resume (View logs): 	| yarn screen:resume 	|
+| Exit:               	| yarn screen:exit   	|
 
 That's it!
