@@ -31,7 +31,7 @@ function changeCwd(): void {
     process.chdir(deployFolder);
     appName = path.basename(deployFolder);
   } catch {
-    log('Deploy folder doesn\'t exist.');
+    log(`Error: Deploy folder doesn't exist`);
     process.exit();
   }
 }
