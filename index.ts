@@ -46,10 +46,10 @@ async function createServer(): Promise<void> {
     res.end('Hi');
 
     if (req.url === '/git/hook') {
-      await close();
+      await closeApp();
       await fetchFromGit();
       await build();
-      await start();
+      await startApp();
     }
   });
 
@@ -69,13 +69,13 @@ async function build(): Promise<void> {
   await exec(`${npmClient} install`);
 }
 
-async function start(): Promise<void> {
+async function startApp(): Promise<void> {
   log('Starting application');
   await exec(`pm2 start ${npmClient} -- start --name "${appName}"`);
   log(`App started. Type 'ps2 logs "${appName}"' to view logs`)
 }
 
-async function close(): Promise<void> {
+async function closeApp(): Promise<void> {
   log('Closing application (if opened)');
   await exec(`pm2 delete "${appName}"`);
 }
