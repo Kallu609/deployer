@@ -7,6 +7,7 @@
     "screen:start": "screen -S deployer -d -m yarn start",
     "screen:quit": "screen -X -S deployer quit",
     "screen:resume": "screen -r deployer",
+    "logs": "pm2 logs --raw",
     "start": "ts-node index.ts"
   },
   "dependencies": {
