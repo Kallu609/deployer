@@ -61,9 +61,9 @@ async function deploy(): Promise<void> {
   await startApp();
 
   const end = new Date().getTime();
-  const duration = end - start;
+  const duration = ((end - start) / 1000).toFixed(3);
 
-  log(`[!] Deployment finished. Took ${duration} ms`);
+  log(`[!] Deployment finished. Took ${duration} s`);
 }
 
 async function fetchFromGit(): Promise<void> {
