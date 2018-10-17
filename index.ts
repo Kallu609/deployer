@@ -51,14 +51,23 @@ async function createServer(): Promise<void> {
 }
 
 async function deploy(): Promise<void> {
+  log('[!] Deployment started');
+
+  const start = new Date().getTime();
+
   await closeApp();
   await fetchFromGit();
   await build();
   await startApp();
+
+  const end = new Date().getTime();
+  const duration = end - start;
+
+  log(`[!] Deployment finished. Took ${duration} ms`);
 }
 
 async function fetchFromGit(): Promise<void> {
-  log('Build started. Fetching from Git');
+  log('Fetching from Git');
   await exec(`git fetch --all`);
   await exec(`git reset --hard ${remoteBranch}/${localBranch}`);
 }
