@@ -5,7 +5,7 @@ Deploys Node.js apps
 ## Requirements
 
 * Node.js
-* Yarn (May work with npm too)
+* Yarn (Should work with npm too)
 * You should have _"start"_ script in your target project's _package.json_
 
 ## Installation
@@ -15,8 +15,8 @@ Deploys Node.js apps
     * `NPM_CLIENT` variable can be `npm` or `yarn`
 
 
-2. Setup Git Webhook on your GitHub projects `/settings/hooks` path.
-    * Hook path is: http://localhost:8080/git/hook (default port is 8080)
+2. Setup Git Webhook on your GitHub project's `Settings -> Hooks` page.
+    * Payload URL is: http://yourserver:8080/git/hook (default port is 8080)
 
 3. Run following commands:
 
